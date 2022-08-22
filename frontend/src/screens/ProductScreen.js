@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import {
   Row,
   Col,
@@ -15,7 +15,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { listProductDetails } from "../actions/productActions";
 
-function ProductScreen(props) {
+function ProductScreen(props, history) {
   const [qty, setQty] = useState(1);
 
   const dispatch = useDispatch();
@@ -29,7 +29,12 @@ function ProductScreen(props) {
       dispatch(listProductDetails(id));
     }
   }, [dispatch, id]);
-  // let product = {};
+  let navigate = useNavigate();
+
+  const addToCartHandler = () => {
+    navigate(`/cart/${id}?qty=${qty}`);
+  };
+
   return (
     <div>
       <Link to="/" className="btn btn-light my-3">
@@ -83,7 +88,12 @@ function ProductScreen(props) {
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <div className="d-grid gap-2">
-                    <Button disabled={product.countInStock === 0} type="button">
+                    {/* working on button */}
+                    <Button
+                      onClick={addToCartHandler}
+                      disabled={product.countInStock === 0}
+                      type="button"
+                    >
                       add to cart
                     </Button>
                   </div>
